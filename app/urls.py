@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import BusView, PassengerView, LocationView, JourneyView
+from .views import BusView, PassengerView, LocationView, JourneyView, DriverView
 
 urlpatterns = [
     #BUS URLS
@@ -25,5 +25,10 @@ urlpatterns = [
     path('journey/edit-journey/<int:journey_id>/', JourneyView.edit_journey, name="edit-journey"),
     path('journey/create-journey/', JourneyView.create_journey, name="create-journey"),
     path('journey/delete-journey/<int:journey_id>/', JourneyView.delete_journey, name="delete-journey"),
-]
 
+    #DRIVER URLS
+    path('driver/', DriverView.list_driver, name="drivers"),
+    path('driver/edit-driver/<int:driver_id>/', DriverView.edit_driver, name="edit-driver"),
+    path('driver/create-driver/', DriverView.create_driver, name="create-driver"),
+    path('driver/delete-driver/<int:driver_id>/', DriverView.delete_driver, name="delete-driver"),
+]

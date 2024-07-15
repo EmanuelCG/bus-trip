@@ -1,12 +1,13 @@
-import CreatePassengerModal from './CreatePassengerModal';
-import EditPassengerModal from './EditPassengerModal';
+import CreateDriverModal from "./CreateDriverModal";
+import EditDriverModal from "./EditDriverModal";
 
-export default function ModalPassengerForm({ isOpenCreate, onCloseCreate, isOpenEdit, onCloseEdit, passengers, currentPassenger, setPassenger }) {
+
+export default function ModalDriverForm({ isOpenCreate, onCloseCreate, isOpenEdit, onCloseEdit, drivers, currentDriver, setDrivers }) {
 
     return (
         <>
-            {isOpenCreate && (<CreatePassengerModal isOpen={isOpenCreate} onClose={onCloseCreate} setPassenger={setPassenger} passengers={passengers} />)}
-            {isOpenEdit && (<EditPassengerModal isOpen={isOpenEdit} onClose={onCloseEdit} passengers={passengers} setPassenger={setPassenger} currentPassenger={currentPassenger} />)}
+            {isOpenCreate && (<CreateDriverModal isOpen={isOpenCreate} onClose={onCloseCreate} setDrivers={setDrivers} drivers={drivers} />)}
+            {isOpenEdit && (<EditDriverModal isOpen={isOpenEdit} onClose={onCloseEdit} drivers={drivers} setDrivers={setDrivers} currentDriver={currentDriver} />)}
         </>
 
     )

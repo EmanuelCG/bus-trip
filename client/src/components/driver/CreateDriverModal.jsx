@@ -1,22 +1,42 @@
 import Datepicker from "react-tailwindcss-datepicker"
 import { useForm } from 'react-hook-form'
-import { createPassenger } from '../../api/passengerApi'
+import { createDriver } from '../../api/driverApi'
 import { toast } from 'react-toastify'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import BusSelect from "./select/BusSelect"
+import { handleFetchAllBuses } from "../../helpers/formHandlers"
 
-export default function CreatePassengerModal({ isOpen, onClose, setPassenger, passengers }) {
-    const { register, handleSubmit, reset } = useForm({
-        defaultValues: { document: '', names: '', last_names: '', date_of_birthday: '' }
+
+export default function CreateDriverModal({ isOpen, onClose, setDrivers, drivers }) {
+    const { register, handleSubmit, reset, control } = useForm({
+        defaultValues: { document: '', names: '', last_names: '', date_of_birthday: '', bus: '' }
     });
+
+    const [buses, setBuses] = useState([])
+
+    useEffect(() => {
+        async function loadBuses() {
+            try {
+                const data = await handleFetchAllBuses();
+                setBuses(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setBuses([]);
+            }
+        }
+        loadBuses()
+    }, [])
 
     const onSubmit = handleSubmit(async (data) => {
         data.date_of_birthday = valueDatepicker.startDate;
-        const res = await createPassenger(data);
+        data.bus = data.bus.value
+        console.log(data)
+        const res = await createDriver(data);
         if (res.status === 201) {
-            setPassenger([...passengers, res.data])
+            setDrivers([...drivers, res.data])
         }
 
-        toast.success('¡Elemento creado correctamente!', { theme: "colored", position: "top-center" });
+        toast.success('Driver created succesfully!', { theme: "colored", position: "top-center" });
         reset();
         onClose();
     });
@@ -31,16 +51,16 @@ export default function CreatePassengerModal({ isOpen, onClose, setPassenger, pa
 
     return (
         // {/* <!-- Main modal --> */}
-        <div id="create-bus-modal" tabIndex="-1" aria-hidden="true" className="fixed left-0 right-0 z-50 flex justify-center w-full h-full overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50 top-20 md:inset-0">
+        <div id="create-driver-modal" tabIndex="-1" aria-hidden="true" className="fixed left-0 right-0 z-50 flex justify-center w-full h-full overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50 top-20 md:inset-0">
             <div className="relative w-full max-w-3xl max-h-full p-4 mt-20">
                 {/* <!-- Modal content --> */}
                 <div className="relative bg-white rounded-lg shadow ">
                     {/* <!-- Modal header --> */}
                     <div className="flex items-center justify-between p-4 border-b rounded-t md:p-5 ">
                         <h3 className="text-lg font-semibold text-gray-900 ">
-                            Register passenger
+                            Register Driver
                         </h3>
-                        <button type="button" className="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto" data-modal-toggle="create-bus-modal" onClick={onClose}>
+                        <button type="button" className="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto" data-modal-toggle="create-driver-modal" onClick={onClose}>
                             <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
@@ -77,10 +97,14 @@ export default function CreatePassengerModal({ isOpen, onClose, setPassenger, pa
                                     inputClassName="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 relative w-full p-2.5"
                                 />
                             </div>
-
+                        </div>
+                        <div className="grid grid-cols-8 gap-4 mb-4">
+                            <div className="col-span-8">
+                                <BusSelect control={control} name="bus" buses={buses} />
+                            </div>
                         </div>
                         <button type="submit" className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Save passanger
+                            Save Driver
                         </button>
                     </form>
                 </div>

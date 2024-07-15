@@ -52,7 +52,7 @@ export function JourneyPage() {
                                                     position: "top-center",
                                                 });
                                             } else {
-                                                toast.error("Oh, not is posible delete journey. Try again!", {
+                                                toast.error("Oh, it is not possible to delete journey. Try again!", {
                                                     theme: "colored",
                                                     position: "top-center",
                                                 });

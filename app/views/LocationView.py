@@ -26,7 +26,7 @@ def edit_location(request, location_id):
     try:
         location = Location.objects.get(pk = location_id)
     except Location.DoesNotExist:
-        return Response({f'La locación {location} no existe'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({f'Location {location} not exits'}, status=status.HTTP_404_NOT_FOUND)
     
     serializer = LocationSerializer(location, data=request.data, partial=True)
     if serializer.is_valid():

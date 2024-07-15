@@ -36,10 +36,11 @@ class PassengerSerializer(serializers.ModelSerializer):
         read_only_fields = ['create_at', 'updated_at', 'formatted_update_at']
 
 class DriverSerializer(serializers.ModelSerializer):
+    bus_plate = serializers.CharField(source='bus.plate', read_only=True)
     class Meta:
         model = Driver
-        fields = ['document', 'names', 'last_names', 'date_of_birthday', 'is_active']
-        read_only_fields = ['create_at', 'updated_at']
+        fields = ['id', 'document', 'names', 'last_names', 'date_of_birthday', 'is_active', 'formatted_update_at', 'bus', 'bus_plate']
+        read_only_fields = ['create_at', 'updated_at', 'formatted_update_at']
 
         
 class TicketSerializer(serializers.ModelSerializer):
