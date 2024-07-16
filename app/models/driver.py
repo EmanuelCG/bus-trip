@@ -9,7 +9,7 @@ class Driver(models.Model):
     is_active = models.BooleanField(default=True)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    bus = models.ForeignKey(Bus, on_delete=models.CASCADE, null=True)
+    bus = models.OneToOneField(Bus, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.names} {self.last_names}'
