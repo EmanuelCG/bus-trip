@@ -50,8 +50,15 @@ class TicketSerializer(serializers.ModelSerializer):
         read_only_fields = ['create_at', 'updated_at', 'passenger', 'journey_driver', 'seat']
 
 class JourneyDriverSerializer(serializers.ModelSerializer):
+    driver_document = serializers.CharField(source='driver.document', read_only=True)
+    journey_description  = serializers.SerializerMethodField()
     class Meta:
         model = JourneyDriver
-        fields = ['datetime_start', 'state', 'driver']
-        read_only_fields = ['create_at', 'updated_at', 'journy']
+        fields = ['id','datetime_start', 'state','journey', 'driver', 'formatted_update_at', 'driver_document', 'journey_description', 'formatted_datetime_start']
+        read_only_fields = ['create_at', 'updated_at']
 
+    def get_state_choices(self, obj):
+        return JourneyDriver.get_state_choices()
+    
+    def get_journey_description(self, obj):
+        return obj.get_journey_description()

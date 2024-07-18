@@ -8,14 +8,27 @@ from ..models.journey_driver import JourneyDriver
 def list_jourey_driver(request):
     journey_driver = JourneyDriver.objects.all()
     serializer = JourneyDriverSerializer(journey_driver, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    response_data = {
+        "data": serializer.data,
+        "state_choices": JourneyDriver.get_state_choices() 
+    }
+    return Response(response_data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_journey_driver(request):
+    print(request.data) 
     seriallizer = JourneyDriverSerializer(data=request.data)
     if seriallizer.is_valid():
-        return Response(seriallizer.data, status=status.HTTP_201_CREATED)
+        print("Data is valid")
+        try:
+            instance = seriallizer.save()
+            print("Instance created:", instance)
+            return Response(seriallizer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print("Error saving instance:", e)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
+        print("Data is invalid", seriallizer.errors)
         return Response(seriallizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
@@ -31,7 +44,7 @@ def edit_journey_driver(request, id):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['DELETE'])
-def delete_journey_driver(id):
+def delete_journey_driver(request, id):
     try:
         obj = JourneyDriver.objects.get(pk=id)
     except JourneyDriver.DoesNotExist:

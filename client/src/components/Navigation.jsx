@@ -7,7 +7,8 @@ const navigation = [
     { name: 'Passanger', href: '/passenger', current: false },
     { name: 'Driver', href: '/driver', current: false },
     { name: 'Journey', href: '/journey', current: false },
-    { name: 'Location', href: '/location', current: false }
+    { name: 'Location', href: '/location', current: false },
+    { name: 'Journey and Driver', href: '/journey-Driver', current: false }
 ]
 
 function classNames(...classes) {

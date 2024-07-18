@@ -2,7 +2,7 @@
 import Select from 'react-select';
 import { Controller } from 'react-hook-form';
 
-const BusSelect = ({ control, name, buses, defaultValue }) => {
+const BusSelector = ({ control, name, buses, defaultValue }) => {
     // console.log(defaultValue)
     const options = buses.map(bus => ({
         value: bus.id,
@@ -86,4 +86,4 @@ const BusSelect = ({ control, name, buses, defaultValue }) => {
     );
 };
 
-export default BusSelect;
+export default BusSelector;

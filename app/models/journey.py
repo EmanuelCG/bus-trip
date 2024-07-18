@@ -10,6 +10,5 @@ class Journey(models.Model):
     location_id_destination = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='journey_destination')
 
     def __str__(self):
-        return f'Journey {self.location_id_origin.name} - {self.location_id_destination.name}'
-    
+        return f'{self.location_id_origin.name} - {self.location_id_destination.name}'
     

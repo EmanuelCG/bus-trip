@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { updatePassenger } from "../../api/passengerApi"
 import { toast } from "react-toastify"
 import Datepicker from "react-tailwindcss-datepicker"
-import BusSelect from "./select/BusSelect"
+import BusSelector from "./selector/BusSelector"
 import { handleFetchAllBuses } from "../../helpers/formHandlers"
 
 export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, currentDriver }) {
@@ -122,7 +122,7 @@ export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, 
                         </div>
                         <div className="grid grid-cols-8 gap-4 mb-4">
                             <div className="col-span-8">
-                                <BusSelect control={control} name="bus" buses={buses} defaultValue={currentDriver ? currentDriver.bus : ''} />
+                                <BusSelector control={control} name="bus" buses={buses} defaultValue={currentDriver ? currentDriver.bus : ''} />
                             </div>
                         </div>
                         <button type="submit" className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">

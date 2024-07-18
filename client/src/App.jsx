@@ -10,6 +10,7 @@ import { PassengerPage } from './pages/PassengerPage'
 import LocationPage from './pages/LocationPage'
 import { JourneyPage } from './pages/JourneyPage'
 import { DriverPage } from './pages/DriverPage'
+import { JourneyDriverPage } from './pages/JourneyDriverPage'
 import 'flowbite/dist/flowbite.css';
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path='/location' element={<LocationPage />} />
         <Route path='/journey' element={<JourneyPage />} />
         <Route path='/driver' element={<DriverPage />} />
+        <Route path='/journey-driver' element={<JourneyDriverPage />} />
       </Routes>
     </BrowserRouter>
   )
