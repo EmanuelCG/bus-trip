@@ -37,11 +37,14 @@ class PassengerSerializer(serializers.ModelSerializer):
 
 class DriverSerializer(serializers.ModelSerializer):
     bus_plate = serializers.CharField(source='bus.plate', read_only=True)
+    assignment_status = serializers.SerializerMethodField()
     class Meta:
         model = Driver
-        fields = ['id', 'document', 'names', 'last_names', 'date_of_birthday', 'is_active', 'formatted_update_at', 'bus', 'bus_plate']
+        fields = ['id', 'document', 'names', 'last_names', 'date_of_birthday', 'is_active', 'formatted_update_at', 'bus', 'bus_plate', 'assignment_status']
         read_only_fields = ['create_at', 'updated_at', 'formatted_update_at']
-
+    
+    def get_assignment_status(self, obj):
+        return "assigned" if JourneyDriver.objects.filter(driver = obj).exists() else "unassigned"
         
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:

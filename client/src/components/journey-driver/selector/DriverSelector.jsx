@@ -13,9 +13,9 @@ const DriverSelector = ({ control, name, drivers, defaultValue }) => {
                     <span className="font-semibold">{driver.id}</span>
                 </div>
                 <div className='grid grid-cols-3 gap-4 pl-2 mt-2 content-stretch'>
-                    <div className='text-sm'><span className='font-medium text-gray-900'>Bus ID: </span>{driver.bus}</div>
+                    <div className='text-sm'><span className='font-medium text-gray-900'>Driver ID: </span>{driver.bus}</div>
                     <div className='text-sm'><span className='font-medium text-gray-900'>Name: </span>{driver.names} {driver.last_names}</div>
-                    <div className='text-sm'><span className='font-medium text-gray-900'>Origin: </span>{driver.bus_plate}</div>
+                    <div className='text-sm'><span className='font-medium text-gray-900'>plate: </span>{driver.bus_plate}</div>
                 </div>
             </div>
         )

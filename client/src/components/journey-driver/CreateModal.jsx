@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react';
 import JourneySelector from "./selector/JourneySelector";
 import DriverSelector from "./selector/DriverSelector";
-import { handleFetchJourneys, handleFetchDrivers } from "../../helpers/formHandlers"
+import { handleFetchJourneys, handleFetchAvariableDrivers } from "../../helpers/formHandlers"
 
 
 export default function CreateModal({ isOpenCreate, onCloseCreate, setJourneyDriver, journeyDriver, states }) {
@@ -31,7 +31,8 @@ export default function CreateModal({ isOpenCreate, onCloseCreate, setJourneyDri
 
         async function loadDrivers() {
             try {
-                const data = await handleFetchDrivers();
+                const data = await handleFetchAvariableDrivers();
+                console.log(data)
                 setDrivers(data);
             } catch (error) {
                 console.error('Error fetching data:', error);

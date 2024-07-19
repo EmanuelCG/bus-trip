@@ -22,12 +22,15 @@ urlpatterns = [
 
     #JOURNEY URLS
     path('journey/', JourneyView.list_journey, name="journeys"),
+    path('journey/<int:journey_id>/', JourneyView.get_one_journey, name="journey"),
     path('journey/edit-journey/<int:journey_id>/', JourneyView.edit_journey, name="edit-journey"),
     path('journey/create-journey/', JourneyView.create_journey, name="create-journey"),
     path('journey/delete-journey/<int:journey_id>/', JourneyView.delete_journey, name="delete-journey"),
 
     #DRIVER URLS
     path('driver/', DriverView.list_driver, name="drivers"),
+    path('driver/<int:driver_id>/', DriverView.get_one_driver, name="driver"),
+    path('driver/avariable/drivers/', DriverView.get_available_drivers, name="avariable-driver"),
     path('driver/edit-driver/<int:driver_id>/', DriverView.edit_driver, name="edit-driver"),
     path('driver/create-driver/', DriverView.create_driver, name="create-driver"),
     path('driver/delete-driver/<int:driver_id>/', DriverView.delete_driver, name="delete-driver"),

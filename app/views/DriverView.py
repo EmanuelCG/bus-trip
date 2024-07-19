@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from ..models.driver import Driver
+from ..models.journey_driver import JourneyDriver
 from ..serializers import DriverSerializer
 
 @api_view(['GET'])
@@ -12,6 +13,25 @@ def list_driver(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_one_driver(request, driver_id):
+    driver = Driver.objects.get(pk=driver_id)
+    if driver:
+        serializer = DriverSerializer(driver)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': f'Driver id={driver_id} not exists'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def get_available_drivers(request):
+    assigned_drivers = JourneyDriver.objects.values_list('driver_id', flat=True)
+    available_drivers = Driver.objects.exclude(id__in=assigned_drivers)
+    serializer = DriverSerializer(available_drivers, many=True)
+    if serializer:
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'error:' 'Not found list drivers'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 def create_driver(request):

@@ -12,7 +12,17 @@ def list_journey(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
+@api_view(['GET'])
+def get_one_journey(request, journey_id):
+    journey = Journey.objects.get(pk=journey_id)
+    if journey:
+        serializer = JourneySerializer(journey)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Journey not exists'}, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['POST'])
 def create_journey(request):
     serializer = JourneySerializer(data=request.data)

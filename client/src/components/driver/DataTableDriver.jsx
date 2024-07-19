@@ -31,6 +31,7 @@ export function DataTableDriver({ data, setDrivers, onEdit, onDelete }) {
                         <th scope="col" className="px-1 py-4">NAMES</th>
                         <th scope="col" className="px-1 py-4">LAST NAME</th>
                         <th scope="col" className="px-1 py-4">BIRTH DATE</th>
+                        <th scope="col" className="px-1 py-4">IS ACTIVE</th>
                         <th scope="col" className="px-1 py-4">STATUS</th>
                         <th scope="col" className="px-1 py-4">BUS</th>
                         <th scope="col" className="px-1 py-4">LAST UPDATE</th>
@@ -63,6 +64,7 @@ export function DataTableDriver({ data, setDrivers, onEdit, onDelete }) {
 
                                     }
                                 </td>
+                                <td className="px-6 py-4 align-middle whitespace-nowrap"><span className={`${driver.assignment_status === 'assigned' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} text-xs font-medium me-2 px-2.5 py-0.5 rounded tracking-wide uppercase`}>{driver.assignment_status}</span></td>
                                 <td className="px-6 py-4 align-middle whitespace-nowrap">{driver.bus_plate}</td>
                                 <td className="px-6 py-4 align-middle whitespace-nowrap">{driver.formatted_update_at}</td>
 

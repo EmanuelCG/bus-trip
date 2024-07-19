@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..serializers import JourneyDriverSerializer
 from ..models.journey_driver import JourneyDriver
+from ..models.driver import Driver
 
 @api_view(['GET'])
 def list_jourey_driver(request):
