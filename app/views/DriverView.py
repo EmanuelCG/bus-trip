@@ -25,7 +25,9 @@ def get_one_driver(request, driver_id):
 
 @api_view(['GET'])
 def get_available_drivers(request):
-    assigned_drivers = JourneyDriver.objects.values_list('driver_id', flat=True)
+    assigned_drivers = JourneyDriver.objects.values_list('driver_id', flat=True) #cuando se usa value_list, despues de 
+    #hace referencia al atributo driver se debe añadir __id para obtener los id
+    
     available_drivers = Driver.objects.exclude(id__in=assigned_drivers)
     serializer = DriverSerializer(available_drivers, many=True)
     if serializer:
@@ -47,9 +49,10 @@ def edit_driver(request, driver_id):
     try:
         driver = Driver.objects.get(pk=driver_id)
     except Driver.DoesNotExist:
-        return Response({'error', 'Driver does not exits'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error', 'Driver does not exist'}, status=status.HTTP_404_NOT_FOUND)
     serializer = DriverSerializer(instance=driver, data=request.data, partial=True)
     if serializer.is_valid():
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response(serializer.errors, status=status.HTTP_204_NO_CONTENT)

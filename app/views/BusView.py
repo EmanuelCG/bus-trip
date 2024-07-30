@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from ..models.bus import Bus
+from ..models.driver import Driver
 from ..serializers import BusSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -13,6 +14,17 @@ def list_bus(request):
         buses = Bus.objects.all()
         serializer = BusSerializer(buses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_available_buses(request):
+     assigned_buses = Driver.objects.filter(bus__isnull=False).values_list('bus_id', flat=True)
+     avariable_buses = Bus.objects.exclude(id__in = assigned_buses)
+     #print("Assigned Buses IDs:", list(assigned_buses))
+     #print(avariable_buses.query)
+     #print(avariable_buses)
+     serializer = BusSerializer(avariable_buses, many=True)
+     #print(serializer.data)
+     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_bus(request):

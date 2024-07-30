@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { updatePassenger } from "../../api/passengerApi"
+import { updateDriver } from "../../api/driverApi"
 import { toast } from "react-toastify"
-import Datepicker from "react-tailwindcss-datepicker"
 import BusSelector from "./selector/BusSelector"
-import { handleFetchAllBuses } from "../../helpers/formHandlers"
+import { handleFetchAvailableBuses } from "../../helpers/formHandlers"
+import CalendarCustom from "./selector/CalendarCustom"
+import { format } from "date-fns"
 
 export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, currentDriver }) {
     const { register, handleSubmit, setValue, reset, control } = useForm({
@@ -12,28 +13,27 @@ export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, 
     })
 
     const [buses, setBuses] = useState([]);
-    const [valueDatepicker, setValueDatepicker] = useState();
-    const handleValueChange = (newValue) => {
-        // setValue('date_of_birthday', newValue);
-        setValueDatepicker(newValue);
-    }
+    const [startDate, setStartDate] = useState()
+    // const dob = currentDriver.date_of_birthday ? new Date(currentDriver.date_of_birthday) : null;
 
     useEffect(() => {
-        async function loadBuses() {
-            const res = await handleFetchAllBuses();
+        async function loadData() {
+            const res = await handleFetchAvailableBuses();
             if (res) {
                 setBuses(res)
                 if (currentDriver) {
-                    console.log('driver', currentDriver.bus)
-                    console.log('date_of_birthday', currentDriver.date_of_birthday)
                     setValue('document', currentDriver.document)
                     setValue('names', currentDriver.names)
                     setValue('last_names', currentDriver.last_names)
                     setValue('bus', currentDriver.bus)
-                    const dateOfBirthday = currentDriver.date_of_birthday;
-                    console.log(dateOfBirthday)
-                    setValueDatepicker(dateOfBirthday);
-                    setValue('date_of_birthday', dateOfBirthday);
+                    setValue('bus', currentDriver.bus)
+                    // setValue('date_of_birthday', dob);
+                    if (currentDriver.date_of_birthday) {
+                        const dateOfBirthday = new Date(currentDriver.date_of_birthday);
+                        setStartDate(dateOfBirthday);
+                    } else {
+                        reset();
+                    }
 
                     if (currentDriver.bus) {
                         const currentBus = res.find(bus => bus.id === currentDriver.bus);
@@ -50,18 +50,20 @@ export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, 
                 setBuses([])
             }
         }
-        loadBuses();
-    }, [currentDriver, setValue])
+        loadData();
+    }, [currentDriver, setValue, reset])
 
 
 
     const onSubmit = handleSubmit(async (data) => {
-        data.date_of_birthday = valueDatepicker.startDate;
-        const res = await updatePassenger(currentDriver.id, data)
+        console.log(data)
+        data.date_of_birthday = format(startDate, "yyyy-MM-dd");
+        data.bus = data.bus.value;
+        const res = await updateDriver(currentDriver.id, data)
         if (res.status === 200) {
             setDrivers(drivers.map(driver => (driver.id === currentDriver.id ? res.data : driver)))
+            toast.info('The update was done!', { theme: "colored", position: "top-center" });
         }
-        toast.info('The update was done!', { theme: "colored", position: "top-center" });
         reset()
         onClose()
 
@@ -73,7 +75,7 @@ export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, 
 
     return (
         // {/* <!-- Main modal --> */}
-        <div id="edit-driver-modal" tabIndex="-1" aria-hidden="true" className="fixed left-0 right-0 z-50 flex justify-center w-full h-full overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50 top-20 md:inset-0">
+        <div id="edit-driver-modal" tabIndex="-1" aria-hidden="true" className="fixed left-0 right-0 z-50 flex justify-center w-full h-full overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50 top-10 md:inset-0">
             <div className="relative w-full max-w-3xl max-h-full p-4 mt-20">
                 {/* <!-- Modal content --> */}
                 <div className="relative bg-white rounded-lg shadow ">
@@ -111,13 +113,7 @@ export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, 
 
                             <div className="col-span-4">
                                 <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthdate</label>
-                                <Datepicker
-                                    useRange={false}
-                                    asSingle={true}
-                                    value={valueDatepicker}
-                                    onChange={handleValueChange}
-                                    inputClassName="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 relative w-full p-2.5"
-                                />
+                                <CalendarCustom startDate={startDate} setStartDate={setStartDate} />
                             </div>
                         </div>
                         <div className="grid grid-cols-8 gap-4 mb-4">

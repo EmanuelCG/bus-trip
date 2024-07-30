@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import BusView, PassengerView, LocationView, JourneyView, DriverView, JourneyDriverView
+from .views import BusView, PassengerView, LocationView, JourneyView, DriverView, JourneyDriverView, SeatView
 
 urlpatterns = [
     #BUS URLS
     path('bus/', BusView.list_bus, name="buses"),
+    path('bus/available/buses/', BusView.get_available_buses, name="available-buses"),
     path('bus/edit-bus/<int:bus_id>/', BusView.edit_bus, name="edit-bus"),
     path('bus/create-bus/', BusView.create_bus, name="create-bus"),
     path('bus/delete-bus/<int:bus_id>/', BusView.delete_bus, name="delete-bus"),
@@ -40,4 +41,11 @@ urlpatterns = [
     path('journey-driver/edit/<int:id>/', JourneyDriverView.edit_journey_driver, name="edit-journey-driver"),
     path('journey-driver/create/', JourneyDriverView.create_journey_driver, name="create-journey-driver"),
     path('journey-driver/delete/<int:id>/', JourneyDriverView.delete_journey_driver, name="delete-journey-driver"),
+
+    #SEAT URLS
+    path('seat/', SeatView.list_seat, name="seat"),
+    path('seat/<int:seat_id>/', SeatView.get_one_seat, name="seat"),
+    path('seat/edit/<int:seat_id>/', SeatView.edit_seat, name="edit-seat"),
+    path('seat/create/', SeatView.create_seat, name="create-seat"),
+    path('seat/delete/<int:seat_id>/', SeatView.delete_seat, name="delete-seat"),
 ]

@@ -15,7 +15,7 @@ class JourneyDriver(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=False)
-    journey = models.ForeignKey(Journey, on_delete=models.CASCADE, null=False)
+    journey = models.ForeignKey(Journey, on_delete=models.CASCADE, null= False)
 
     @classmethod
     def get_state_choices(cls):

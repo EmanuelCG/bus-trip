@@ -1,6 +1,6 @@
-import { getAllBus } from '../api/busApi'
+import { getAllBus, getAvailableBuses } from '../api/busApi'
 import { getAllJourney, getOneJourney } from '../api/journeyApi'
-import { getOneDriver, getAvariableDrivers } from '../api/driverApi'
+import { getOneDriver, getAvailableDrivers } from '../api/driverApi'
 
 export async function handleFetchAllBuses() {
     try {
@@ -11,6 +11,17 @@ export async function handleFetchAllBuses() {
         console.log('error fetch')
         return []
     }
+}
+
+export async function handleFetchAvailableBuses() {
+    try {
+        const res = await getAvailableBuses()
+        return res.data
+    } catch {
+        console.log('error fetch')
+        return []
+    }
+
 }
 
 export async function handleFetchOneJourney(id) {
@@ -46,12 +57,13 @@ export async function handleFetchOneDriver(id) {
 
 
 
-export async function handleFetchAvariableDrivers() {
+export async function handleFetchAvailableDrivers() {
     try {
-        const res = await getAvariableDrivers()
+        const res = await getAvailableDrivers()
         return res.data
     } catch {
         console.log('error fetch')
         return []
     }
 }
+

@@ -6,7 +6,7 @@ from .models.journey import Journey
 from .models.driver import Driver
 from .models.location import Location
 from .models.journey_driver import JourneyDriver
-
+from .models.seat import Seat
 
 class BusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,3 +65,10 @@ class JourneyDriverSerializer(serializers.ModelSerializer):
     
     def get_journey_description(self, obj):
         return obj.get_journey_description()
+
+class SeatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seat
+        fields = ['seat_number', 'bus', 'status','create_at', 'updated_at']
+        read_only_fields = ['create_at', 'updated_at']
+

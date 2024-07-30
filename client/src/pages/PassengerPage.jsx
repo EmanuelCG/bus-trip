@@ -44,9 +44,9 @@ export function PassengerPage() {
                     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-50 ">
                         <div className="overflow-hidden bg-white rounded-lg shadow-lg w-96">
                             <div className="p-4">
-                                <h1 className="mb-2 text-xl font-bold">Confirmar eliminación</h1>
+                                <h1 className="mb-2 text-xl font-bold">Attention</h1>
                                 <p className="mb-4 text-gray-700">
-                                    ¿Estás seguro de que quieres eliminar este elemento?
+                                    Are you sure you want to delete this item?
                                 </p>
                                 <div className="flex justify-end">
                                     <button
@@ -70,7 +70,7 @@ export function PassengerPage() {
                                         }}
                                         className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-600 focus:outline-none"
                                     >
-                                        Sí
+                                        Yes
                                     </button>
                                     <button
                                         onClick={onClose}
