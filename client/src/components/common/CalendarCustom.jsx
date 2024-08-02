@@ -68,6 +68,7 @@ export default function CalendarCustom({ startDate, setStartDate, odb }) {
 
             selected={startDate}
             onChange={(date) => setStartDate(date)}
+            placeholderText="Year/Mounth/Day"
             isClearable
             dateFormat="YYYY-MM-dd"
             className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"

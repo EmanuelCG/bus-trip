@@ -1,16 +1,20 @@
-import Datepicker from "react-tailwindcss-datepicker"
 import { useForm } from 'react-hook-form'
 import { createPassenger } from '../../api/passengerApi'
 import { toast } from 'react-toastify'
 import { useState } from 'react';
+import CalendarCustom from "../common/CalendarCustom";
+import { format } from 'date-fns';
 
 export default function CreatePassengerModal({ isOpen, onClose, setPassenger, passengers }) {
     const { register, handleSubmit, reset } = useForm({
         defaultValues: { document: '', names: '', last_names: '', date_of_birthday: '' }
     });
 
+    const [startDate, setStartDate] = useState();
+
+
     const onSubmit = handleSubmit(async (data) => {
-        data.date_of_birthday = valueDatepicker.startDate;
+        data.date_of_birthday = format(startDate, "yyyy-MM-dd");
         const res = await createPassenger(data);
         if (res.status === 201) {
             setPassenger([...passengers, res.data])
@@ -21,11 +25,6 @@ export default function CreatePassengerModal({ isOpen, onClose, setPassenger, pa
         onClose();
     });
 
-    const [valueDatepicker, setValueDatepicker] = useState({ startDate: null });
-
-    const handleValueChange = (newValue) => {
-        setValueDatepicker(newValue);
-    }
 
     if (!isOpen) return null;
 
@@ -69,13 +68,7 @@ export default function CreatePassengerModal({ isOpen, onClose, setPassenger, pa
 
                             <div className="col-span-4">
                                 <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthdate</label>
-                                <Datepicker
-                                    useRange={false}
-                                    asSingle={true}
-                                    value={valueDatepicker}
-                                    onChange={handleValueChange}
-                                    inputClassName="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 relative w-full p-2.5"
-                                />
+                                <CalendarCustom startDate={startDate} setStartDate={setStartDate} />
                             </div>
 
                         </div>

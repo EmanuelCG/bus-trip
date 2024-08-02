@@ -1,7 +1,7 @@
 // import Datepicker from "react-tailwindcss-datepicker"
 import Datepicker from "react-datepicker"
 import { useForm } from 'react-hook-form'
-import { createJourneyDriver } from '../../api/journerDriverApi'
+import { createJourneyDriver } from '../../api/journeyDriverApi'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react';
 import JourneySelector from "./selector/JourneySelector";

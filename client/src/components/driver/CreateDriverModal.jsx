@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react';
 import BusSelector from "./selector/BusSelector"
 import { handleFetchAvailableBuses } from "../../helpers/formHandlers";
-import CalendarCustom from "./selector/CalendarCustom";
+import CalendarCustom from "../common/CalendarCustom";
 import { format } from 'date-fns';
 
 export default function CreateDriverModal({ isOpen, onClose, setDrivers, drivers }) {
@@ -31,7 +31,6 @@ export default function CreateDriverModal({ isOpen, onClose, setDrivers, drivers
 
     const onSubmit = handleSubmit(async (data) => {
         data.date_of_birthday = format(startDate, "yyyy-MM-dd");
-        console.log(data.date_of_birthday)
         data.bus = data.bus.value
         console.log(data)
         const res = await createDriver(data);

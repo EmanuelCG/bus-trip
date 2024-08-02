@@ -4,7 +4,7 @@ import { updateDriver } from "../../api/driverApi"
 import { toast } from "react-toastify"
 import BusSelector from "./selector/BusSelector"
 import { handleFetchAvailableBuses } from "../../helpers/formHandlers"
-import CalendarCustom from "./selector/CalendarCustom"
+import CalendarCustom from '../common/CalendarCustom'
 import { format } from "date-fns"
 
 export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, currentDriver }) {
@@ -19,33 +19,35 @@ export default function EditDriverModal({ isOpen, onClose, drivers, setDrivers, 
     useEffect(() => {
         async function loadData() {
             const res = await handleFetchAvailableBuses();
-            if (res) {
-                setBuses(res)
-                if (currentDriver) {
-                    setValue('document', currentDriver.document)
-                    setValue('names', currentDriver.names)
-                    setValue('last_names', currentDriver.last_names)
-                    setValue('bus', currentDriver.bus)
-                    setValue('bus', currentDriver.bus)
-                    // setValue('date_of_birthday', dob);
-                    if (currentDriver.date_of_birthday) {
-                        const dateOfBirthday = new Date(currentDriver.date_of_birthday);
-                        setStartDate(dateOfBirthday);
-                    } else {
-                        reset();
-                    }
+            if (currentDriver) {
+                setValue('document', currentDriver.document)
+                setValue('names', currentDriver.names)
+                setValue('last_names', currentDriver.last_names)
+                setValue('bus', currentDriver.bus)
+                setValue('bus', currentDriver.bus)
+                // setValue('date_of_birthday', dob);
+                if (currentDriver.date_of_birthday) {
+                    const dateOfBirthday = new Date(currentDriver.date_of_birthday);
+                    setStartDate(dateOfBirthday);
+                } else {
+                    reset();
+                }
 
-                    if (currentDriver.bus) {
-                        const currentBus = res.find(bus => bus.id === currentDriver.bus);
-                        if (currentBus) {
-                            setValue('bus', {
-                                value: currentBus.id,
-                                label: currentBus.plate,
-                                ...currentBus
-                            });
-                        }
+                if (currentDriver.bus) {
+                    const currentBus = res.find(bus => bus.id === currentDriver.bus);
+                    if (currentBus) {
+                        setValue('bus', {
+                            value: currentBus.id,
+                            label: currentBus.plate,
+                            ...currentBus
+                        });
                     }
                 }
+            }
+
+            if (res) {
+                setBuses(res)
+
             } else {
                 setBuses([])
             }

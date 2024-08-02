@@ -1,41 +1,80 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { updateJourney } from "../../api/journeyApi";
-import { getAllLocation } from "../../api/locationApi";
+import { updateJourneyDriver } from "../../api/journeyDriverApi";
+import { handleFetchAvailableDrivers, handleFetchJourneys } from '../../helpers/formHandlers'
+import JourneySelector from "./selector/JourneySelector";
+import DriverSelector from "./selector/DriverSelector";
+import DatePicker from "react-datepicker";
 
-export default function EditModal({ isOpenEdit, onCloseEdit, setJourneys, journeys, currentJourney }) {
-    const { register, handleSubmit, reset, setValue } = useForm({
-        defaultValues: { duration_in_seconds: '', location_id_origin: '', location_id_destination: '' }
+export default function EditModal({ isOpenEdit, onCloseEdit, setJourneyDriver, journeyDriver, current, states }) {
+    const { register, handleSubmit, reset, control, setValue } = useForm({
+        defaultValues: { datetime_start: '', state: '', journey: '', driver: '' }
     })
 
-    const [locations, setLocations] = useState([])
+    const [journeys, setJourneys] = useState([])
+    const [drivers, setDrivers] = useState([])
+    const [startDate, setStartDate] = useState()
 
     useEffect(() => {
-        async function loadLocations() {
-            const res = await getAllLocation()
-            setLocations(res.data)
-        }
-        loadLocations()
+        async function loadJourneys() {
+            try {
+                const res = await handleFetchJourneys();
+                setJourneys(res)
+                if (current.journey) {
+                    const currentJourney = res.find(journey => journey.id === current.journey);
+                    if (currentJourney) {
+                        console.log(currentJourney)
+                        setValue('journey', {
+                            value: currentJourney.id,
+                            label: currentJourney.location_origin_name + ' to ' + currentJourney.location_destination_name,
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setJourneys([]);
+            }
 
-        if (currentJourney) {
-            console.log(currentJourney)
-            setValue('duration_in_seconds', currentJourney.duration_in_seconds);
-            setValue('location_id_origin', currentJourney.location_id_origin);
-            setValue('location_id_destination', currentJourney.location_id_destination);
+
         }
 
-    }, [currentJourney, setValue])
+        async function loadDrivers() {
+            try {
+                const res = await handleFetchAvailableDrivers();
+                setDrivers(res)
+                if (current.driver) {
+                    const currentDriver = res.find(driver => driver.id === current.driver)
+                    if (currentDriver) {
+                        console.log(current)
+                        setValue('driver', {
+                            value: currentDriver.id,
+                            label: currentDriver
+                        })
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setDrivers([]);
+            }
+        }
+
+        loadJourneys()
+        loadDrivers()
+
+    }, [current, setValue, reset])
 
     const onSubmit = handleSubmit(async (data) => {
-        const res = await updateJourney(currentJourney.id, data)
+        const res = await updateJourneyDriver(current.id, data)
         if (res.status === 200) {
-            setJourneys(journeys.map(journey => (journey.id === currentJourney.id ? res.data : journey)));
+            setJourneyDriver(journeyDriver.map(obj => (obj.id === current.id ? res.data : obj)));
         }
         toast.info('Edition completed!', { theme: "colored", position: "top-center" });
         reset();
         onCloseEdit();
     })
+
+
 
     if (!isOpenEdit) return null;
 
@@ -47,7 +86,7 @@ export default function EditModal({ isOpenEdit, onCloseEdit, setJourneys, journe
                     {/* <!-- Modal header --> */}
                     <div className="flex items-center justify-between p-4 border-b rounded-t md:p-5 ">
                         <h3 className="text-lg font-semibold text-gray-900 ">
-                            Register Journey
+                            Edit Journey Driver
                         </h3>
                         <button type="button" className="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto" data-modal-toggle="edit-bus-modal" onClick={onCloseEdit}>
                             <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -60,33 +99,42 @@ export default function EditModal({ isOpenEdit, onCloseEdit, setJourneys, journe
                     <form className="p-4 md:p-5" onSubmit={onSubmit} >
                         <div className="grid grid-cols-8 gap-4 mb-4">
                             <div className="col-span-4">
-                                <label htmlFor="plate" className="block mb-2 text-sm font-medium text-gray-900">Duration</label>
-                                <input type="number" name="duration_in_seconds" id="plate" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Duration in seconds" min="1" pattern="^[0-9]+" required="" {...register("duration_in_seconds", { required: true })} />
+                                <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Departure Time</label>
+                                <DatePicker
+                                    useRange={false}
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    showTimeSelect
+                                    dateFormat="YYYY-MM-dd h:mm aa"
+                                    className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    calendarClassName="shadow-lg border border-gray-300 rounded-md"
+                                    dayClassName={() => "text-sm p-1 rounded-full hover:bg-gray-200"}
+                                    wrapperClassName="w-full" />
                             </div>
                             <div className="col-span-4">
-                                <label htmlFor="plate" className="block mb-2 text-sm font-medium text-gray-900">Location Origin</label>
-                                <select {...register('location_id_origin', { required: true })} id="location_id_origin" name="location_id_origin" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value={currentJourney.location_id_origin} disabled>{currentJourney.location_origin_name}</option>
+                                <label htmlFor="plate" className="block mb-2 text-sm font-medium text-gray-900">Status</label>
+                                <select {...register('state', { required: true })} name="state" defaultValue="" id="states" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="" disabled>Choose a status</option>
                                     {
-                                        locations.map(location => (
-                                            <option key={location.id} value={location.id}>{location.name}</option>
+                                        states.map(state => (
+                                            <option key={state[0]} value={state[0]}>{state[0]}: {state[1]}</option>
                                         ))
                                     }
                                 </select>
                             </div>
                         </div>
                         <div className="grid grid-cols-8 gap-4 mb-4">
-                            <div className="col-span-4">
-                                <label htmlFor="plate" className="block mb-2 text-sm font-medium text-gray-900">Location Destination</label>
-                                <select {...register('location_id_destination', { 'required': true })} id="location_id_destination" name="location_id_destination" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value={currentJourney.location_id_destination} disabled>{currentJourney.location_destination_name
-                                    }</option>
-                                    {
-                                        locations.map(location => (
-                                            <option key={location.id} value={location.id}>{location.name}</option>
-                                        ))
-                                    }
-                                </select>
+
+                            <div className="col-span-8">
+                                <JourneySelector control={control} name="journey" journeys={journeys} defaultValue={current ? current.journey : ''} />
+                            </div>
+
+
+                        </div>
+                        <div className="grid grid-cols-8 gap-4 mb-4">
+
+                            <div className="col-span-8">
+                                <DriverSelector control={control} name="driver" drivers={drivers} defaultValue={current ? current.driver : ''} />
                             </div>
                         </div>
                         <button type="submit" className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
