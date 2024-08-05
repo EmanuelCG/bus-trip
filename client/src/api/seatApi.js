@@ -1,7 +1,7 @@
 import axios from "axios"
 
 
-const SEAT_API = axios({
+const SEAT_API = axios.create({
     baseURL: "http://localhost:8000/api/seat/"
 })
 

@@ -10,7 +10,6 @@ export function DataTableSeat({ data, setSeat, onEdit, onDelete }) {
     const [filterText, setFilterText] = useState('');
     const [hidden, setHidden] = useState('')
 
-
     const handleToggle = async (seatId, isActive) => {
         const newStatus = !isActive
         try {
@@ -35,23 +34,16 @@ export function DataTableSeat({ data, setSeat, onEdit, onDelete }) {
         setHidden('')
     };
 
-    const filteredData = data.filter(driver => {
-        return (
-            driver.plate?.toLowerCase().includes(filterText.toLowerCase()) ||
-            driver.serial?.toLowerCase().includes(filterText.toLowerCase()) ||
-            driver.brand?.toLowerCase().includes(filterText.toLowerCase()) ||
-            driver.model?.toLowerCase().includes(filterText.toLowerCase()) ||
-            driver.year?.toLowerCase().includes(filterText.toLowerCase())
-
-        )
-    });
+    // const filteredData = data.filter(seat =>
+    //     seat.seat_number?.toLowerCase().includes(filterText.toLowerCase()) ||
+    //     seat.bus?.toLowerCase().includes(filterText.toLowerCase())
+    // );
 
     const columns = [
         {
             name: 'ID',
             selector: row => row.id,
             sortable: true,
-            maxWidth: '20px',
             compact: true
         },
         {
@@ -62,7 +54,7 @@ export function DataTableSeat({ data, setSeat, onEdit, onDelete }) {
         },
         {
             name: 'BUS',
-            selector: row => row.bus,
+            selector: row => row.bus_plate,
             sortable: true,
             compact: true
         },
@@ -70,7 +62,7 @@ export function DataTableSeat({ data, setSeat, onEdit, onDelete }) {
             name: 'STAUS',
             selector: row => row.status,
             sortable: false,
-            maxWidth: '20px',
+
             compact: true,
             cell: row => (
                 <form action="">
@@ -89,18 +81,10 @@ export function DataTableSeat({ data, setSeat, onEdit, onDelete }) {
         },
         {
             name: 'UPDATE DATE',
-            selector: row => row.updated_at,
+            selector: row => row.formatted_update_at,
             sortable: true,
             compact: true
         },
-        {
-            name: 'CREATE DATE',
-            selector: row => row.create_at,
-            sortable: true,
-            compact: true
-
-        },
-
         {
             name: '',
             compact: true,
@@ -148,7 +132,7 @@ export function DataTableSeat({ data, setSeat, onEdit, onDelete }) {
 
             <DataTable
                 columns={columns}
-                data={filteredData}
+                data={data}
                 pagination={true}
                 highlightOnHover
                 pointerOnHover

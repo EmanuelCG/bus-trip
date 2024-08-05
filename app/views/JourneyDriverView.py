@@ -11,7 +11,7 @@ def list_jourey_driver(request):
     serializer = JourneyDriverSerializer(journey_driver, many=True)
     response_data = {
         "data": serializer.data,
-        "state_choices": JourneyDriver.get_state_choices() 
+        "state_choices": JourneyDriver.get_state_choices(),
     }
     return Response(response_data, status=status.HTTP_200_OK)
 
@@ -53,6 +53,4 @@ def delete_journey_driver(request, id):
     obj_deleted = obj
     obj.delete()
     return Response({'res':f'This object {obj_deleted} deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-
-
 

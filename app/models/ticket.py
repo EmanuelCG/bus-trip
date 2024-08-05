@@ -12,6 +12,6 @@ class Ticket(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     passenger = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     journey_driver = models.OneToOneField(JourneyDriver, on_delete=models.CASCADE)
-    seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
+    seat = models.OneToOneField(Seat, on_delete=models.CASCADE, default='')
 
 

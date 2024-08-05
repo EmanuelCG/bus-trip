@@ -9,7 +9,7 @@ export default function CreatePassengerModal({ isOpen, onClose, setSeat, seats }
     const [buses, setBuses] = useState([])
 
     const { register, handleSubmit, reset } = useForm({
-        defaultValues: { seat_number: '', bus: '', status: '' }
+        defaultValues: { seat_number: '', bus: '', status: true }
     });
 
     useEffect(() => {
@@ -23,6 +23,7 @@ export default function CreatePassengerModal({ isOpen, onClose, setSeat, seats }
     }, [])
 
     const onSubmit = handleSubmit(async (data) => {
+        console.log(data)
         const res = await createSeat(data);
         if (res.status === 201) {
             setSeat([...seats, res.data])

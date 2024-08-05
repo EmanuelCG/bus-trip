@@ -19,6 +19,7 @@ export function PassengerPage() {
                 const res = await getAllPassenger();
                 if (Array.isArray(res.data)) {
                     setPassenger(res.data);
+                    console.log(res.data)
                 } else {
                     console.error('Data received is not an array:', res.data);
                     setPassenger([]);

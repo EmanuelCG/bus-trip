@@ -24,10 +24,14 @@ class LocationSerializer(serializers.ModelSerializer):
 class JourneySerializer(serializers.ModelSerializer):
     location_origin_name = serializers.CharField(source='location_id_origin.name', read_only=True)
     location_destination_name = serializers.CharField(source='location_id_destination.name', read_only=True)
+    description = serializers.SerializerMethodField()
     class Meta:
         model = Journey
-        fields = ['id', 'duration_in_seconds', 'location_id_origin', 'location_id_destination','location_origin_name', 'location_destination_name','is_active']
+        fields = ['id', 'duration_in_seconds', 'location_id_origin', 'location_id_destination','location_origin_name', 'location_destination_name','is_active', 'description']
         read_only_fields = ['create_at', 'updated_at']
+    
+    def get_description(self, obj):
+        return str(obj)
 
 class PassengerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,9 +59,12 @@ class TicketSerializer(serializers.ModelSerializer):
 class JourneyDriverSerializer(serializers.ModelSerializer):
     driver_document = serializers.CharField(source='driver.document', read_only=True)
     journey_description  = serializers.SerializerMethodField()
+    sold_capacity = serializers.SerializerMethodField()
+    total_seats  = serializers.SerializerMethodField()
+    occupancy_percentage = serializers.SerializerMethodField()
     class Meta:
         model = JourneyDriver
-        fields = ['id','datetime_start', 'state','journey', 'driver', 'formatted_update_at', 'driver_document', 'journey_description', 'formatted_datetime_start']
+        fields = ['id','datetime_start', 'state','journey', 'driver', 'formatted_update_at', 'driver_document', 'journey_description', 'formatted_datetime_start', 'sold_capacity', 'total_seats', 'occupancy_percentage']
         read_only_fields = ['create_at', 'updated_at']
 
     def get_state_choices(self, obj):
@@ -65,10 +72,30 @@ class JourneyDriverSerializer(serializers.ModelSerializer):
     
     def get_journey_description(self, obj):
         return obj.get_journey_description()
+    
+    def get_sold_capacity(self, obj):
+        #Obtenemos el diccionarios de asientos ocupaodos por bus
+        seat_stats = JourneyDriver.calculate_seat_statics(obj.journey.id)
+        #Obtenemos el bus del conductor asociando
+        bus_id = obj.driver.bus.id if obj.driver and obj.driver.bus else None
+        #Retomamos el numero de asientos ocupados por ese bus, o 0 si no hay datos
+        return seat_stats.get(bus_id, {}).get('occupied_seats',0)
+    
+    def get_total_seats(self, obj):
+        seat_stats = JourneyDriver.calculate_seat_statics(obj.journey.id)
+        bus_id = obj.driver.bus.id if obj.driver and obj.driver.bus else None
+        #Retomamos el numero de asientos ocupados por ese bus, o 0 si no hay datos
+        return seat_stats.get(bus_id, {}).get('total_seats', 0)
+    
+    def get_occupancy_percentage(self, obj):
+        seat_stats = JourneyDriver.calculate_seat_statics(obj.journey.id)
+        bus_id = obj.driver.bus.id if obj.driver and obj.driver.bus else None
+        return seat_stats.get(bus_id,{}).get('occupancy_percentage', 0)
 
 class SeatSerializer(serializers.ModelSerializer):
+    bus_plate = serializers.CharField(source="bus.plate", read_only=True)
     class Meta:
         model = Seat
-        fields = ['seat_number', 'bus', 'status','create_at', 'updated_at']
-        read_only_fields = ['create_at', 'updated_at']
+        fields = ['id', 'seat_number', 'bus', 'status','create_at', 'updated_at', 'bus_plate', 'formatted_update_at']
+        read_only_fields = ['id', 'create_at', 'updated_at']
 

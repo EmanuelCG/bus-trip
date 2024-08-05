@@ -14,21 +14,22 @@ export function SeatPage() {
     const [currentSeat, setCurrentSeat] = useState(null)
 
     useEffect(() => {
-        async function loadPassenger() {
+        async function loadSeats() {
             try {
                 const res = await getAllSeat();
+                console.log('API response:', res.data); // Verifica aquí que es un array
                 if (Array.isArray(res.data)) {
                     setSeat(res.data);
                 } else {
-                    console.error('Data received is not an array:', res.data);
-                    setSeat([]);
+                    console.error('Expected an array but received:', res.data);
+                    setSeat([]); // Valor predeterminado seguro
                 }
             } catch (error) {
-                console.error('Error fetching passenger data:', error)
+                console.error('Error fetching data:', error);
             }
         }
-        loadPassenger();
-    }, [])
+        loadSeats();
+    }, []);
 
     const handleEdit = (data) => {
         setCurrentSeat(data)

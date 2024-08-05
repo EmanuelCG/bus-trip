@@ -60,7 +60,7 @@ export function DataTableLocation({ data, onEdit, onDelete, setLocations }) {
         },
         {
             name: 'CREATED',
-            selector: row => row.formatted_created_at,
+            selector: row => row.formatted_create_at,
             sortable: true,
             compact: true
         },

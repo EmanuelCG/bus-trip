@@ -3,17 +3,21 @@ import { useState } from "react";
 export default function SearchDefault({ filterText, setFilterText }) {
 
     const [search, setSearch] = useState('')
-    const [hidden, setHidden] = useState('')
+    const [searchClicked, setSearchClicked] = useState(false);
+
 
     const handleSearch = () => {
-        setFilterText(search)
-        setHidden('hidden')
+
+        if (search.trim() !== '') {
+            setFilterText(search)
+            setSearchClicked(true);
+        }
     }
 
     const handleClearSearch = () => {
-        setFilterText("");
+        setFilterText('');
         setSearch('')
-        setHidden('')
+        setSearchClicked(false);
     };
 
     return (
@@ -26,7 +30,7 @@ export default function SearchDefault({ filterText, setFilterText }) {
                     </svg>
                 </div>
                 <input type="search" id="default-search" className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg ps-10 bg-gray-50 focus:border-blue-400 focus:outline-none focus:ring-0" placeholder="Search driver" required onChange={e => setSearch(e.target.value)} value={search} />
-                <button type="submit" className={`text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${hidden}`} onClick={handleSearch}>Search</button>
+                <button type="submit" className={`text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${searchClicked ? 'hidden' : ''}`} onClick={handleSearch}>Search</button>
 
                 {
                     filterText && (

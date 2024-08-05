@@ -10,8 +10,8 @@ from ..serializers import SeatSerializer
 def list_seat(request):
     seats = Seat.objects.all()
     serializer = SeatSerializer(seats, many=True)
-    if serializer:
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # print(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_one_seat(request, seat_id):
@@ -34,8 +34,8 @@ def create_seat(request):
 
 @api_view(['PUT'])
 def edit_seat(request, seat_id):
-    seat = get_object_or_404(Seat, pk=id)
-    serializer = SeatSerializer(Seat, data=seat)
+    seat = get_object_or_404(Seat, pk=seat_id)
+    serializer = SeatSerializer(seat, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -44,7 +44,7 @@ def edit_seat(request, seat_id):
 
 @api_view(['DELETE'])
 def delete_seat(request, seat_id):
-    seat = get_object_or_404(Seat, pk=id)
+    seat = get_object_or_404(Seat, pk=seat_id)
     if seat:
         seat_delete = seat
         seat.delete()
