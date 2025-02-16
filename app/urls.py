@@ -2,12 +2,14 @@ from django.urls import path
 from .views import BusView, PassengerView, LocationView, JourneyView, DriverView, JourneyDriverView, SeatView
 
 urlpatterns = [
+
     #BUS URLS
     path('bus/', BusView.list_bus, name="buses"),
     path('bus/available/buses/', BusView.get_available_buses, name="available-buses"),
     path('bus/edit-bus/<int:bus_id>/', BusView.edit_bus, name="edit-bus"),
     path('bus/create-bus/', BusView.create_bus, name="create-bus"),
     path('bus/delete-bus/<int:bus_id>/', BusView.delete_bus, name="delete-bus"),
+    path('bus/find-bus/<int:bus_id>/', BusView.get_bus_id, name="find-bus"),
     
     #PASSENGER URLS
     path('passenger/', PassengerView.list_passenger, name="passengers"),

@@ -84,7 +84,7 @@ export function BusPage() {
                 <h2 className="mb-10 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl">Tracking <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded tracking-wide">Driver</span></h2>
             </div>
             <div className="flex justify-end col-span-1 h-14">
-                <button data-modal-target="create-driver-modal" data-modal-toggle="create-driver-modal" href="" type="button" className="flex items-center justify-center focus:outline-none text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 transition-all" onClick={() => setCreateModalBusOpen(true)}><span>Register Driver</span><PlusIcon className="ml-4 size-4" /></button>
+                <button data-modal-target="create-driver-modal" data-modal-toggle="create-driver-modal" href="" type="button" className="flex items-center justify-center focus:outline-none text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 transition-all" onClick={() => setCreateModalBusOpen(true)}><span>Register Bus</span><PlusIcon className="ml-4 size-4" /></button>
             </div>
             <ModalBusForm
                 isOpenCreate={createModalBusOpen}

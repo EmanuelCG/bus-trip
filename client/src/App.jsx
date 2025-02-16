@@ -11,7 +11,6 @@ import LocationPage from './pages/LocationPage'
 import { JourneyPage } from './pages/JourneyPage'
 import { DriverPage } from './pages/DriverPage'
 import { JourneyDriverPage } from './pages/JourneyDriverPage'
-import 'flowbite/dist/flowbite.css';
 import { SeatPage } from './pages/SeatPage'
 function App() {
 

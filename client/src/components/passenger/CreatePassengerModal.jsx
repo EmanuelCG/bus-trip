@@ -51,10 +51,10 @@ export default function CreatePassengerModal({ isOpen, onClose, setPassenger, pa
                         <div className="grid grid-cols-8 gap-4 mb-4">
                             <div className="col-span-4">
                                 <label htmlFor="plate" className="block mb-2 text-sm font-medium text-gray-900">Document</label>
-                                <input type="text" name="document" id="plate" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="document" required="" {...register("document", { required: true })} />
+                                <input type="text" name="document" id="plate" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="document" required="" maxLength={12} {...register("document", { required: true })} />
                             </div>
                             <div className="col-span-4">
-                                <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">Names</label>
+                                <label htmlFor="color" className="block mb-2 text-sm font-medium text-gray-900">Name</label>
                                 <input type="text" name="names" id="color" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="names" required="" {...register("names", { required: true })} />
                             </div>
 
@@ -62,7 +62,7 @@ export default function CreatePassengerModal({ isOpen, onClose, setPassenger, pa
                         <div className="grid grid-cols-8 gap-4 mb-4">
 
                             <div className="col-span-4">
-                                <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last names</label>
+                                <label htmlFor="brand" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last name</label>
                                 <input type="text" name="lastnames" id="brand" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="last names" required="" {...register("last_names", { required: true })} />
                             </div>
 

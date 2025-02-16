@@ -18,10 +18,19 @@ def list_bus(request):
 @api_view(['GET'])
 def get_available_buses(request):
      assigned_buses = Driver.objects.filter(bus__isnull=False).values_list('bus_id', flat=True)
-     avariable_buses = Bus.objects.exclude(id__in = assigned_buses)
-     serializer = BusSerializer(avariable_buses, many=True)
+     available_buses = Bus.objects.exclude(id__in = assigned_buses)
+     serializer = BusSerializer(available_buses, many=True)
      return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def get_bus_id(request, id):
+     try:
+        bus = Bus.objects.get(pk = id)
+        serializer = BusSerializer(bus)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+     except Bus.DoesNotExist:
+          return Response({"error": "Bus not found"}, status=status.HTTP_404_NOT_FOUND)
+     
 @api_view(['POST'])
 def create_bus(request):
     if request.method == "POST":
